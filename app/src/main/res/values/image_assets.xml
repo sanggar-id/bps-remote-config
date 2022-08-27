@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="Typos">
+    <string name="banner_url">https://cdn1-production-images-kly.akamaized.net/1AiEtK-vHbiOumAqGO5ZDWU_7Qc=/673x373/smart/filters:quality(75):strip_icc():format(jpeg)/kly-media-production/medias/4053636/original/059034500_1655279373-fried-rice-with-minced-pork-tomato-carrot-cucumber-plate.jpg</string>
+</resources>

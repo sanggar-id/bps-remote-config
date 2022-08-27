@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<defaults>
+  <entry>
+    <key>ad_new_banner</key>
+    <value>false</value>
+  </entry>
+</defaults>

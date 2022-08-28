@@ -3,10 +3,13 @@ package id.sanggar.bpsabtesting.ui
 import android.os.Bundle
 import android.view.ViewStub
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import id.sanggar.bpsabtesting.R
 import id.sanggar.bpsabtesting.di.FeatureModule
+import id.sanggar.bpsabtesting.domain.state.UiState
 import id.sanggar.bpsabtesting.domain.uimodel.AdUiModel
+import id.sanggar.bpsabtesting.domain.uimodel.CashbackUiModel
 import id.sanggar.bpsabtesting.domain.uimodel.FoodUiModel
 import kotlin.LazyThreadSafetyMode.NONE
 
@@ -19,10 +22,14 @@ class MainActivity : AppCompatActivity(), MainView {
         FeatureModule.getMainPresenter(this)
     }
 
+    // simulated
+    private val userId = 789
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        presenter.getCashbackData()
         presenter.getAd()
         presenter.getFood()
     }
@@ -37,20 +44,55 @@ class MainActivity : AppCompatActivity(), MainView {
         txtDesc.text = data.description
     }
 
-    override fun onFoodListResult(data: List<FoodUiModel>) {
+    override fun onFoodListResult(data: UiState<List<FoodUiModel>>) {
+        when (data) {
+            is UiState.Success -> {
+                val result = data.result.simplified()
+                lstFood.text = result
+            }
+            is UiState.Error -> {
+                lstFood.text = data.message
+            }
+        }
+    }
+
+    override fun onCashbackResult(cashback: UiState<CashbackUiModel>) {
+        when (cashback) {
+            is UiState.Success -> {
+                val message = cashback.result.message
+                val defaultAmount = cashback.result.amount
+                val user = cashback.result.user.firstOrNull { it.userId == userId }
+
+                showToast("$message dengan cashback ${user?.amount ?: defaultAmount}%")
+            }
+            is UiState.Error -> {
+                showToast(cashback.message)
+            }
+        }
+    }
+
+    private fun FoodUiModel.toReadable(): String {
+        return "$name dengan harga $price"
+    }
+
+    private fun List<FoodUiModel>.simplified(): String {
         var result = ""
 
-        data.map {
+        this.map {
             it.toReadable()
         }.map {
             result += "$it \n\n"
         }
 
-        lstFood.text = result
+        return result
     }
 
-    private fun FoodUiModel.toReadable(): String {
-        return "$name dengan harga $price"
+    private fun showToast(message: String) {
+        Toast.makeText(
+            applicationContext,
+            message,
+            Toast.LENGTH_LONG
+        ).show()
     }
 
 }

@@ -1,30 +1,29 @@
 package id.sanggar.bpsabtesting.ui
 
 import id.sanggar.bpsabtesting.domain.GetAdUseCase
+import id.sanggar.bpsabtesting.domain.GetCashbackUseCase
 import id.sanggar.bpsabtesting.domain.GetFoodUseCase
-import id.sanggar.remoteconfig.RemoteConfig
 
 class MainPresenter constructor(
     private val adUseCase: GetAdUseCase,
     private val foodUseCase: GetFoodUseCase,
-    private val remoteConfig: RemoteConfig,
+    private val cashbackUseCase: GetCashbackUseCase,
     private val view: MainView
 ) {
 
-    fun getAd() {
-        val isBannerNew = remoteConfig.getBoolean(RC_NEW_BANNER)
-        val result = adUseCase.execute(isBannerNew)
+    fun getCashbackData() {
+        val result = cashbackUseCase.execute(Unit)
+        view.onCashbackResult(result)
+    }
 
+    fun getAd() {
+        val result = adUseCase.execute(Unit)
         view.onAdResult(result)
     }
 
     fun getFood() {
         val result = foodUseCase.execute(Unit)
         view.onFoodListResult(result)
-    }
-
-    companion object {
-        private const val RC_NEW_BANNER = "ad_new_banner"
     }
 
 }

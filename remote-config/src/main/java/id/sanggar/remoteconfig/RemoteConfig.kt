@@ -10,6 +10,7 @@ interface RemoteConfig {
 
     fun getString(key: String, defaultValue: String): String
 
+    // cukup di call sekali, bisa dilakukan di Application class
     fun fetch(listener: Listener)
 
     interface Listener {

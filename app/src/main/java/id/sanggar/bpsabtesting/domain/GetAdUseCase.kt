@@ -6,14 +6,10 @@ import id.sanggar.bpsabtesting.domain.uimodel.AdUiModel
 
 class GetAdUseCase constructor(
     private val repository: AdRepository
-) : UseCase<Boolean, AdUiModel>() {
+) : UseCase<Unit, AdUiModel>() {
 
-    override fun execute(param: Boolean): AdUiModel {
-        val result = if (param) {
-            repository.new()
-        } else {
-            repository.old()
-        }
+    override fun execute(param: Unit): AdUiModel {
+        val result = repository.adBanner()
 
         return AdUiModel(
             title = result.title,
